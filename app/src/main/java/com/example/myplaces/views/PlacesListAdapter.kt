@@ -1,8 +1,9 @@
-package com.example.movielist.views
+package com.example.myplaces.views
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myplaces.views.PlaceItemViewHolder
 import com.example.myplaces.viewmodels.PlaceItem
 
 class PlacesListAdapter(private val list: List<PlaceItem>) : RecyclerView.Adapter<PlaceItemViewHolder>() {

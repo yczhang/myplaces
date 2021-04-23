@@ -1,4 +1,4 @@
-package com.example.movielist.views
+package com.example.myplaces.views
 
 import android.content.Intent
 import android.net.Uri
@@ -27,6 +27,6 @@ class PlaceItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     }
 
     override fun onClick(p0: View?) {
-        
+
     }
 }

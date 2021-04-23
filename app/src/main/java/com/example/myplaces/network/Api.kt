@@ -1,4 +1,4 @@
-package com.example.movielist.network
+package com.example.myplaces.network
 
 import com.example.myplaces.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

@@ -1,4 +1,4 @@
-package com.example.movielist.network
+package com.example.myplaces.network
 import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.Response
