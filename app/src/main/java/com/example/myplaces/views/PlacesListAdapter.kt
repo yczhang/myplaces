@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myplaces.views.PlaceItemViewHolder
 import com.example.myplaces.viewmodels.PlaceItem
+import java.lang.Integer.min
 
 class PlacesListAdapter(private val list: List<PlaceItem>) : RecyclerView.Adapter<PlaceItemViewHolder>() {
 
@@ -17,7 +18,7 @@ class PlacesListAdapter(private val list: List<PlaceItem>) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return min(list.size,10)
     }
 
     override fun onBindViewHolder(holder: PlaceItemViewHolder, position: Int) {

@@ -18,15 +18,23 @@ class PlaceItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.item_place, parent, false)),
     View.OnClickListener {
 
+    private var title: TextView? = null
+    private var icon: ImageView? = null
+    private var rated: TextView? = null
+
     init {
+        title = itemView.findViewById(R.id.tv_title)
+        icon = itemView.findViewById(R.id.iv_icon)
+        rated = itemView.findViewById(R.id.tv_rated)
     }
 
     fun bind(item: PlaceItem)
     {
-
+        title?.text = item.name
+        rated?.text = "Rating : ${item.rating}"
     }
 
     override fun onClick(p0: View?) {
-
+        // TBD
     }
 }
