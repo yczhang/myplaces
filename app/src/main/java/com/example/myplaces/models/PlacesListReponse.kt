@@ -1,11 +1,16 @@
 package com.example.myplaces.viewmodels
 
+import com.squareup.moshi.Json
+
 data class PlacesListReponse (
-    val result : List<PlaceItem>? = null
+    val results : List<PlaceItem>? = null
         )
 
 data class PlaceItem (
+    @Json(name= "name")
     val name : String ?,
-    val image : String ?,
-    val rating: Int ?
+    @Json(name="icon")
+    val icon : String ?,
+    @Json(name="rating")
+    val rating: Double ?
         )
