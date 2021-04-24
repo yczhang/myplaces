@@ -35,14 +35,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isDataReady: LiveData<Boolean>
         get() = _isDataReady
 
+    var range: Double = 10.0
+
     init {
 
     }
     fun searchPlaces(keyword:String) {
 
         coroutineScope.launch {
-
-            val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,"-33.8670522,151.1957362","1500")
+            val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,"-33.8670522,151.1957362","${range * 1625 as Int}")
 
             try {
                 val result = request.await()
@@ -70,5 +71,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getItems() : List<PlaceItem>
     {
         return results ?: listOf()
+    }
+
+    fun onRangeChanged(text: CharSequence) {
+
+        if (text.isNotEmpty()) {
+            range = text.toString().toDouble()
+            if (range <= 0) range = 10.0
+        }
     }
 }
