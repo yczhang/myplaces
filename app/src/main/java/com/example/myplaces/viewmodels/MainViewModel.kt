@@ -42,7 +42,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         coroutineScope.launch {
 
-            val request = PlacesListAPI.retrofitService.fetch(keyword, BuildConfig.BASE_KEY,"-33.8670522,151.1957362","1500")
+            val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,"-33.8670522,151.1957362","1500")
 
             try {
                 val result = request.await()

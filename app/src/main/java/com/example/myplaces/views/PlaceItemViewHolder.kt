@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myplaces.BuildConfig
 import com.example.myplaces.R
 import com.example.myplaces.viewmodels.PlaceItem
 import com.squareup.picasso.Picasso
@@ -31,10 +32,25 @@ class PlaceItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     fun bind(item: PlaceItem)
     {
         title?.text = item.name
+
         rated?.text = "Rating : ${item.rating}"
+
+        if(item.photos?.size == 0) {
+            Picasso.get().load(item.icon).into(icon)
+        } else {
+            var photoRef = item.photos?.get(0)
+
+            photoRef ?.let {
+
+                val imageUrl = BuildConfig.BASE_URL + "maps/api/place/photo?" + "maxwidth=256&" + "photoreference=${photoRef.photo_reference}&" + "key=" + BuildConfig.BASE_KEY
+                Picasso.get().load(imageUrl).into(icon)
+            } ?: run {
+                Picasso.get().load(item.icon).into(icon)
+            }
+        }
     }
 
     override fun onClick(p0: View?) {
-        // TBD
+        // Could nav to map or a detail page
     }
 }
