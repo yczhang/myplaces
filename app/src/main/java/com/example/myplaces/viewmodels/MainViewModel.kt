@@ -2,6 +2,7 @@ package com.example.myplaces.viewmodels
 
 import android.app.Application
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -183,5 +184,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 repository?.insert(newRecord)
             }
         }
+    }
+
+    fun onHistoryListClick(index: Int) {
+        Log.d(TAG, "History Clicked ${index}")
     }
 }
