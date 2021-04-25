@@ -67,12 +67,20 @@ class MainFragment : Fragment() {
             }
         })
 
-        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
-                when ( tab?.position) {
-                    0 ->  LoadPlaces()
-                    1 ->  LoadHistory()
+                when (tab?.position) {
+                    0 -> {
+                        binding.rvList.apply {
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter =
+                                PlacesListAdapter(
+                                    viewModel.getItems()
+                                )
+                        }
+                    }
+                    1 -> viewModel.loadHistory()
                     else -> Log.e(TAG, "Unknow Option")
 
                 }
@@ -122,6 +130,24 @@ class MainFragment : Fragment() {
             }
             else {
                 Toast.makeText(requireContext(), "Places Search Failed.  Please check your network connection, and try again", Toast.LENGTH_LONG).show()
+            }
+        })
+
+        viewModel.isHistoryReady.observe(viewLifecycleOwner, Observer {
+
+            if (it) {
+                binding.rvList.apply {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter =
+                        HIstoryListAdapter(
+                            viewModel.getHistory()
+                        )
+                }
+
+                binding.svKeyword.clearFocus()
+            }
+            else {
+                Toast.makeText(requireContext(), "Load History Failed!", Toast.LENGTH_LONG).show()
             }
         })
     }

@@ -45,6 +45,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isDataReady: LiveData<Boolean>
         get() = _isDataReady
 
+    private val _isHistoryReady = MutableLiveData<Boolean>()
+    val isHistoryReady: LiveData<Boolean>
+        get() = _isHistoryReady
+
     var range: Double = 10.0
 
     private lateinit var currentLocation: LatLng
@@ -63,6 +67,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadDataLocally(path:String) {
 
+    }
+
+    fun loadHistory() {
+        coroutineDatabaseScope.launch {
+            history = repository?.getAll()
+
+            coroutineScope.launch {
+                _isHistoryReady.value = true
+            }
+        }
     }
 
     fun loadPlacesFromHistory(index:Int) {
@@ -86,7 +100,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     fun searchPlaces(keyword:String) {
-        return
         coroutineScope.launch {
 
             val locationStr = "${currentLocation.latitude},${currentLocation.longitude}"
