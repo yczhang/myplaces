@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.myplaces.BuildConfig
+import com.example.myplaces.R
 import com.example.myplaces.api.PlacesListAPI
 import com.example.myplaces.database.PlaceRoomDatabase
 import com.example.myplaces.database.PlacesRepository
@@ -66,8 +67,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadDataLocally(path:String) {
+    fun loadDataLocally(resourceID: Int) {
+        try {
+            val inputStream = getApplication<Application>().resources.openRawResource(resourceID)
 
+            val jsonStr = inputStream.bufferedReader().use {
+                it.readText()
+            }
+
+            var response  = Gson().fromJson<PlacesListReponse>(jsonStr, PlacesListReponse::class.java)
+
+            results = response.results
+
+            _isDataReady.value = true
+
+        } catch (e: Exception) {
+            _isDataReady.value = false
+        }
     }
 
     fun loadHistory() {
