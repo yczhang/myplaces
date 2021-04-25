@@ -39,6 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var repository: PlacesRepository? = null
 
     private var results :  List<PlaceItem> ? = null
+    private var history :  List<SearchResult> ? = null
 
     private val _isDataReady = MutableLiveData<Boolean>()
     val isDataReady: LiveData<Boolean>
@@ -135,11 +136,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getItems() : List<PlaceItem>
-    {
+    fun getItems() : List<PlaceItem> {
         return results ?: listOf()
     }
 
+    fun getHistory() : List<SearchResult> {
+
+        return history ?: listOf()
+    }
     fun onRangeChanged(text: CharSequence) {
 
         if (text.isNotEmpty()) {

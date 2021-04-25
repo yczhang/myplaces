@@ -19,12 +19,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myplaces.R
 import com.example.myplaces.databinding.MainFragmentBinding
 import com.example.myplaces.viewmodels.MainViewModel
+import com.example.myplaces.views.HIstoryListAdapter
 import com.example.myplaces.views.PlacesListAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.*
 
 class MainFragment : Fragment() {
@@ -61,6 +65,28 @@ class MainFragment : Fragment() {
 
                 return true
             }
+        })
+
+        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+                when ( tab?.position) {
+                    0 ->  LoadPlaces()
+                    1 ->  LoadHistory()
+                    else -> Log.e(TAG, "Unknow Option")
+
+                }
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
         })
 
         activity ?.let {
@@ -120,5 +146,4 @@ class MainFragment : Fragment() {
             }
         }
     }
-
 }

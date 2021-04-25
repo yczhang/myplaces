@@ -53,11 +53,13 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="List" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="History" />
