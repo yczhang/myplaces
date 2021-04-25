@@ -138,20 +138,14 @@ class MainFragment : Fragment() {
         viewModel.isHistoryReady.observe(viewLifecycleOwner, Observer {
 
             binding.tabLayout.getTabAt(1)?.select()
-            if (it) {
-                binding.rvList.apply {
+
+            binding.rvList.apply {
                     layoutManager = LinearLayoutManager(activity)
                     adapter =
                         HIstoryListAdapter(
                             viewModel.getHistory()
                         )
                 }
-
-                binding.svKeyword.clearFocus()
-            }
-            else {
-                Toast.makeText(requireContext(), "Load History Failed!", Toast.LENGTH_LONG).show()
-            }
         })
     }
 

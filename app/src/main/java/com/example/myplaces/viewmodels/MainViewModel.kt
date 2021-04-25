@@ -191,4 +191,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         loadPlacesFromHistory(index)
     }
+
+    fun onResetClick() {
+
+        coroutineDatabaseScope.launch {
+
+            repository?.dellAll()
+
+
+
+            coroutineScope.launch {
+                history = null
+                _isHistoryReady.value = false
+            }
+        }
+
+    }
 }
