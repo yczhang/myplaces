@@ -1,5 +1,8 @@
 package com.example.myplaces.viewmodels
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 data class PlacesListReponse (
@@ -15,7 +18,7 @@ data class PlaceItem (
     val rating: Double ?,
     @Json(name="photos")
     val photos:List<PlacePhoto>?
-        )
+    )
 
 data class PlacePhoto(
     @Json(name="height")

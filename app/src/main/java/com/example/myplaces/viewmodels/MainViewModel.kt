@@ -37,13 +37,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var range: Double = 10.0
 
+    private lateinit var currentLocation: LatLng
+
+    private var retried = false
+
+    private var keyword = ""
+
     init {
 
     }
     fun searchPlaces(keyword:String) {
+        this.keyword = keyword
 
         coroutineScope.launch {
-            val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,"-33.8670522,151.1957362","${range * 1625 as Int}")
+
+            val locationStr = "${currentLocation.latitude},${currentLocation.longitude}"
+            var rangeStr = "${range * 1625 as Int}"
+            val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,locationStr,rangeStr)
 
             try {
                 val result = request.await()
@@ -52,7 +62,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     results = result.body()?.results
 
-                    _isDataReady.value = true
+                    if (results?.isEmpty() == true && retried == false) {
+
+                        retried = true
+
+                    } else {
+                        _isDataReady.value = true
+                    }
 
                     Log.d(TAG,"Count: ${results?.size} ")
 
@@ -79,5 +95,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             range = text.toString().toDouble()
             if (range <= 0) range = 10.0
         }
+    }
+
+    fun setCurrentLocation(lat:Double, lon:Double) {
+        currentLocation = LatLng(lat,lon)
     }
 }
