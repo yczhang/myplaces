@@ -67,14 +67,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadDataLocally(resourceID: Int) {
+    fun loadDataLocally(jsonStr: String ? ) {
         try {
-            val inputStream = getApplication<Application>().resources.openRawResource(resourceID)
-
-            val jsonStr = inputStream.bufferedReader().use {
-                it.readText()
-            }
-
             var response  = Gson().fromJson<PlacesListReponse>(jsonStr, PlacesListReponse::class.java)
 
             results = response.results
