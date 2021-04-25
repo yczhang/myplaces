@@ -54,11 +54,12 @@ class MainFragment : Fragment() {
         binding.svKeyword.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.searchPlaces(query)
-                return false
+                binding.svKeyword.clearFocus()
+                return true
             }
             override fun onQueryTextChange(newText: String): Boolean {
 
-                return false
+                return true
             }
         })
 

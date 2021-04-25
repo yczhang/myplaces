@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.myplaces.BuildConfig
 import com.example.myplaces.api.PlacesListAPI
+import com.example.myplaces.database.PlaceRoomDatabase
+import com.example.myplaces.database.PlacesRepository
+import com.example.myplaces.database.SearchResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -17,17 +20,23 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.time.LocalDateTime
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG = "MainViewModel"
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private val coroutineDatabaseScope = CoroutineScope(viewModelJob + Dispatchers.IO)
+
+    private var repository: PlacesRepository? = null
 
     private var results :  List<PlaceItem> ? = null
 
@@ -43,16 +52,40 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
 
+        application.applicationContext ?.let {
+
+            val placeDao = PlaceRoomDatabase.getDatabase(it,coroutineDatabaseScope).placeDao()
+
+            repository = PlacesRepository(placeDao)
+        }
     }
 
     fun loadDataLocally(path:String) {
-        
+
     }
 
-    fun searchPlacesLocally(keyword:String) {
+    fun loadPlacesFromHistory(index:Int) {
 
+        coroutineDatabaseScope.launch {
+
+            val item = repository?.getItem(index)
+
+            coroutineScope.launch {
+
+                item?.let {
+
+                    results = Gson().fromJson(it.value, Array<PlaceItem>::class.java).toList()
+
+                    _isDataReady.value = !(results == null)
+
+                } ?: run {
+                        _isDataReady.value = false
+                }
+            }
+        }
     }
     fun searchPlaces(keyword:String) {
+        return
         coroutineScope.launch {
 
             val locationStr = "${currentLocation.latitude},${currentLocation.longitude}"
@@ -77,11 +110,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             _isDataReady.value = false
                         } else {
                             retried = true
+                            Log.e(TAG,"searchPlaces Retry")
                             searchPlaces(keyword)
                         }
 
                     } else {
-                        saveSearchingResult()
+                        saveSearchingResult(keyword)
                         _isDataReady.value = true
                     }
 
@@ -118,7 +152,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         currentLocation = LatLng(lat,lon)
     }
 
-    private fun saveSearchingResult() {
+    private fun saveSearchingResult(keyword:String) {
 
+        coroutineDatabaseScope.launch {
+
+            results?.let {
+
+                val current = LocalDateTime.now()
+                var gson = Gson()
+                var jsonString = gson.toJson(it)
+
+                val newRecord = SearchResult(0, keyword, jsonString, current.toString())
+                repository?.insert(newRecord)
+            }
+        }
     }
 }

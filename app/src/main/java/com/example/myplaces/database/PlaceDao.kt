@@ -9,7 +9,7 @@ import androidx.room.Query
 interface PlaceDao {
 
     @Query("SELECT * FROM search_table")
-    fun getSearchist(): List<SearchResult>
+    fun getAll(): List<SearchResult>
 
     @Insert
     fun insert(item: SearchResult)
@@ -19,4 +19,7 @@ interface PlaceDao {
 
     @Query("DELETE FROM search_table")
     fun deleteAll()
+
+    @Query("SELECT * FROM search_table WHERE table_id = :index  LIMIT 1")
+    fun getItem( index: Int): SearchResult
 }

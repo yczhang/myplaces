@@ -12,7 +12,13 @@ class PlacesRepository (private val placeDao: PlaceDao){
     }
 
     fun getAll(): List<SearchResult> {
-        return placeDao.getSearchist()
+        return placeDao.getAll()
+    }
+
+    fun getItem(index:Int) : SearchResult ? {
+
+       return placeDao.getItem(index)
+
     }
 
     fun dellAll()
