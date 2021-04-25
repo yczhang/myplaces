@@ -188,5 +188,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onHistoryListClick(index: Int) {
         Log.d(TAG, "History Clicked ${index}")
+
+        loadPlacesFromHistory(index)
     }
 }

@@ -117,6 +117,8 @@ class MainFragment : Fragment() {
     {
         viewModel.isDataReady.observe(viewLifecycleOwner, Observer {
 
+            binding.tabLayout.getTabAt(0)?.select()
+
             if (it) {
                 binding.rvList.apply {
                     layoutManager = LinearLayoutManager(activity)
@@ -135,6 +137,7 @@ class MainFragment : Fragment() {
 
         viewModel.isHistoryReady.observe(viewLifecycleOwner, Observer {
 
+            binding.tabLayout.getTabAt(1)?.select()
             if (it) {
                 binding.rvList.apply {
                     layoutManager = LinearLayoutManager(activity)

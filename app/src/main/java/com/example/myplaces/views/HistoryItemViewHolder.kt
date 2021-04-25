@@ -36,7 +36,9 @@ class HistoryItemViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     }
 
     override fun onClick(p0: View?) {
+
         val parentFragment = FragmentManager.findFragment<MainFragment>(itemView)
+
         val viewModel = ViewModelProvider(parentFragment).get(MainViewModel::class.java)
 
         viewModel.onHistoryListClick(adapterPosition)
