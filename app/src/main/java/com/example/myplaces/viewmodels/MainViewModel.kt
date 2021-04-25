@@ -44,6 +44,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
 
     }
+
+    fun loadDataLocally(path:String) {
+        
+    }
+
+    fun searchPlacesLocally(keyword:String) {
+
+    }
     fun searchPlaces(keyword:String) {
         coroutineScope.launch {
 
@@ -51,7 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             var rangeStr = "${range * 1625 as Int}"
 
             if(retried) rangeStr = "${range * 1625 * 2 as Int}"
-            
+
             val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,locationStr,rangeStr)
 
             try {
@@ -73,6 +81,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         }
 
                     } else {
+                        saveSearchingResult()
                         _isDataReady.value = true
                     }
 
@@ -107,5 +116,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setCurrentLocation(lat:Double, lon:Double) {
         currentLocation = LatLng(lat,lon)
+    }
+
+    private fun saveSearchingResult() {
+
     }
 }
