@@ -41,18 +41,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var retried = false
 
-    private var keyword = ""
-
     init {
 
     }
     fun searchPlaces(keyword:String) {
-        this.keyword = keyword
-
         coroutineScope.launch {
 
             val locationStr = "${currentLocation.latitude},${currentLocation.longitude}"
             var rangeStr = "${range * 1625 as Int}"
+
+            if(retried) rangeStr = "${range * 1625 * 2 as Int}"
+            
             val request = PlacesListAPI.retrofitService.fetchplaces(keyword, BuildConfig.BASE_KEY,locationStr,rangeStr)
 
             try {
@@ -62,9 +61,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     results = result.body()?.results
 
-                    if (results?.isEmpty() == true && retried == false) {
+                    if (results?.isEmpty() == true) {
 
-                        retried = true
+                        if(retried ) {
+                            Log.d(TAG,"Retrying...")
+                            retried = false
+                            _isDataReady.value = false
+                        } else {
+                            retried = true
+                            searchPlaces(keyword)
+                        }
 
                     } else {
                         _isDataReady.value = true
@@ -74,10 +80,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 } else {
                     _isDataReady.value = false
+                    retried = false
                     Log.e(TAG, "Failed")
                 }
             } catch (e:Exception) {
                 _isDataReady.value = false
+                retried = false
                 Log.e(TAG, e.localizedMessage)
             }
 
