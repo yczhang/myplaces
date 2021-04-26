@@ -57,6 +57,7 @@ class MainFragment : Fragment() {
 
         binding.svKeyword.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                binding.clMainProgress.visibility = View.VISIBLE
                 viewModel.searchPlaces(query)
                 binding.svKeyword.clearFocus()
                 return true
@@ -118,6 +119,7 @@ class MainFragment : Fragment() {
         viewModel.isDataReady.observe(viewLifecycleOwner, Observer {
 
             binding.tabLayout.getTabAt(0)?.select()
+            binding.clMainProgress.visibility = View.GONE
 
             if (it) {
                 binding.rvList.apply {
