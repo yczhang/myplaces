@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG,"Cannot get context")
         }
 
-        checkPermission()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,35 +54,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkPermission() {
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions()
-        }
-    }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            1)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if(requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        }
-        else {
-            finish()
-        }
-    }
 }

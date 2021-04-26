@@ -102,7 +102,7 @@ class MainFragment : Fragment() {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
         }
 
-        obtainLocation()
+        checkPermission()
 
         setupObservers()
 
@@ -163,12 +163,40 @@ class MainFragment : Fragment() {
 
             it.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
-
                     viewModel.setCurrentLocation(location.latitude, location.longitude)
+                } else {
                 }
             }
             it.lastLocation.addOnFailureListener { it ->
             }
         }
     }
+
+
+    private fun checkPermission() {
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+        } else {
+            obtainLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if(requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            obtainLocation()
+        }
+        else {
+            requireActivity().finish()
+        }
+    }
+
 }
