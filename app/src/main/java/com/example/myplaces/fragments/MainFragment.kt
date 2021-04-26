@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
         binding.svKeyword.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 binding.clMainProgress.visibility = View.VISIBLE
-                viewModel.searchPlaces(query)
+                obtainLocation(query)
                 binding.svKeyword.clearFocus()
                 return true
             }
@@ -151,7 +151,7 @@ class MainFragment : Fragment() {
         })
     }
 
-    private fun obtainLocation() {
+    private fun obtainLocation(query:String) {
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(requireContext(),
@@ -164,7 +164,10 @@ class MainFragment : Fragment() {
             it.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     viewModel.setCurrentLocation(location.latitude, location.longitude)
+                    viewModel.searchPlaces(query)
                 } else {
+                    binding.clMainProgress.visibility = View.INVISIBLE
+                    Toast.makeText(requireContext(), "Cannot get current location, please try again", Toast.LENGTH_LONG).show()
                 }
             }
             it.lastLocation.addOnFailureListener { it ->
@@ -181,8 +184,6 @@ class MainFragment : Fragment() {
             ) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
-        } else {
-            obtainLocation()
         }
     }
 
@@ -192,7 +193,6 @@ class MainFragment : Fragment() {
         grantResults: IntArray
     ) {
         if(requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            obtainLocation()
         }
         else {
             requireActivity().finish()
