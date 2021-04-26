@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="96dp"
+            android:layout_marginEnd="128dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -58,7 +58,7 @@
                 android:id="@+id/tab_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="List" />
+                android:text="Places" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_history"

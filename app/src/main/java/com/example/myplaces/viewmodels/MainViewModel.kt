@@ -65,6 +65,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             repository = PlacesRepository(placeDao)
         }
+
+        currentLocation = LatLng(0.0,0.0)
     }
 
     fun loadDataLocally(jsonStr: String ? ) {
